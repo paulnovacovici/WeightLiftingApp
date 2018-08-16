@@ -1,13 +1,17 @@
-import { FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from '../constants'
+import { ADDING_DATA_FAILURE, ADDING_DATA_SUCCESS, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from '../constants'
 
 initialState = {
-  data: [],
+  max: 0,
   isFetching: false,
   error: false
 }
 
 export default function dataReducer(state = initialState, action) {
   switch(action.type) {
+    case ADDING_DATA_SUCCESS:
+      return state
+    case ADDING_DATA_FAILURE:
+      return state
     case FETCHING_DATA:
       return {
         ...state,

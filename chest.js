@@ -3,6 +3,8 @@ import { StyleSheet, Text, View, TouchableHighlight, Dimensions, FlatList, Image
 import DropdownMenu from 'react-native-dropdown-menu';
 import StatusBar from './StatusBar'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { Provider, connect } from 'react-redux'
+import { fetchDataFromAPI, addDataToAPI } from './actions'
 
 BigCricle = () => {
   return(
@@ -14,26 +16,42 @@ BigCricle = () => {
   )
 }
 
-WeightInput = () => {
-  return (
-    <View
-        style={{flex:1,alignItems:'center'}}>
-      <Text style= {styles.largeText}> What weight did you do today? </Text>
-      <View style={{flexDirection:'row'}}>
-        <TextInput
-          style={styles.textInput}
-          placeholder="Enter Weight"
-          keyboardType="numeric"
-          returnKeyType="send"
-        />
-        <TouchableHighlight>
-          <View style={{marginLeft:10, height:40,width:50, borderRadius:10, justifyContent:'center', alignItems: 'center', backgroundColor:'#F7B733', marginTop: 20}}>
-            <Text style={{color:'#DFDCE3', fontWeight:'bold'}}>Send</Text>
-          </View>
-        </TouchableHighlight>
+class WeightInput extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      inputText: ''
+    };
+  }
+  render() {
+    return (
+      <View
+          style={{flex:1,alignItems:'center'}}>
+        <Text style= {styles.largeText}> What weight did you do today? </Text>
+        <View style={{flexDirection:'row'}}>
+          <TextInput
+            style={styles.textInput}
+            value={this.state.inputText}
+            onChangeText = {(text) => this.setState({inputText:text})}
+            placeholder="Enter Weight"
+            keyboardType="numeric"
+            returnKeyType="send"
+          />
+          <TouchableHighlight style={{marginLeft:10, height:40,width:50, borderRadius:10, justifyContent:'center', alignItems: 'center', backgroundColor:'#F7B733', marginTop: 20}}
+            onPress= { () => {
+              // Adds text input to database
+              //this.props.addData({body:"chest", workout:"Flat Barbell", weight:parseInt(this.state.inputText,10), reps:"10x10"})
+              this.setState({inputText:''})
+            } }
+            underlayColor='green'>
+            <View >
+              <Text style={{color:'#DFDCE3', fontWeight:'bold'}}>Send</Text>
+            </View>
+          </TouchableHighlight>
+        </View>
       </View>
-    </View>
-  )
+    )
+  }
 }
 
 HistoryButton = () => {
@@ -46,7 +64,7 @@ HistoryButton = () => {
   )
 }
 
-export default class Chest extends Component {
+class Chest extends Component {
   render() {
     var data = [["Flat Barbell", "Incline Barbell", "Chest Fly Dumbbell", "Flat Dumbbell", "Incline Dumbbell"], ["4x10","5x5","4x10","4x6"]]
     return(
@@ -65,7 +83,7 @@ export default class Chest extends Component {
             <KeyboardAvoidingView
                 style={{flex:1,alignItems:'center'}}
                 behavior="padding">
-                <WeightInput/>
+                <WeightInput {...this.props}/>
             </KeyboardAvoidingView>
             <HistoryButton/>
         </DropdownMenu>
@@ -116,3 +134,18 @@ const styles = StyleSheet.create({
     borderRadius: 30
   }
 });
+
+function mapStateToProps(state) {
+  return {
+    data: state.data
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getData: () => dispatch(fetchDataFromAPI()),
+    addData: (weight) => dispatch(addDataToAPI(weight))
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Chest)
