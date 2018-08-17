@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, Dimensions, FlatList, Image } from 'react-native';
 import { Provider, connect } from 'react-redux'
-import { fetchDataFromAPI } from './actions'
+import { changeBody, fetchDataFromAPI } from './actions'
 import StatusBar from './StatusBar'
 
 const {height, width} = Dimensions.get('window')
@@ -35,6 +35,7 @@ const App = (props) => {
   onPressEvent = (index) => {
     switch (index) {
       case 0:
+          props.changeBody('chest')
           props.navigation.navigate('Chest');
       case 1:
         return {
@@ -137,7 +138,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getData: () => dispatch(fetchDataFromAPI())
+    getData: () => dispatch(fetchDataFromAPI()),
+    changeBody: (body) => dispatch(changeBody(body))
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(App)

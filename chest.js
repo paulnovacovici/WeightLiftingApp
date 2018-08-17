@@ -6,12 +6,11 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import { Provider, connect } from 'react-redux'
 import { fetchDataFromAPI, addDataToAPI } from './actions'
 
-BigCricle = () => {
+BigCricle = (props) => {
   return(
     <View style={styles.bigCricle}>
         <Text style={styles.maxText}> Max </Text>
-        {/* pull below text from database*/}
-        <Text style={styles.maxWeight}> 250 </Text>
+        <Text style={styles.maxWeight}> {props.data.max} </Text>
     </View>
   )
 }
@@ -40,7 +39,7 @@ class WeightInput extends Component {
           <TouchableHighlight style={{marginLeft:10, height:40,width:50, borderRadius:10, justifyContent:'center', alignItems: 'center', backgroundColor:'#F7B733', marginTop: 20}}
             onPress= { () => {
               // Adds text input to database
-              //this.props.addData({body:"chest", workout:"Flat Barbell", weight:parseInt(this.state.inputText,10), reps:"10x10"})
+              this.props.addData({body:"chest", workout:"Flat Barbell", weight:parseInt(this.state.inputText,10), reps:"10x10"})
               this.setState({inputText:''})
             } }
             underlayColor='green'>
@@ -66,7 +65,7 @@ HistoryButton = () => {
 
 class Chest extends Component {
   render() {
-    var data = [["Flat Barbell", "Incline Barbell", "Chest Fly Dumbbell", "Flat Dumbbell", "Incline Dumbbell"], ["4x10","5x5","4x10","4x6"]]
+    var data = [this.props.data.workouts, this.props.data.reps]
     return(
     <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
       <View style={{flex:1, backgroundColor: '#4ABDAC'}}>
@@ -78,7 +77,7 @@ class Chest extends Component {
               activityTintColor={'green'}
               data={data}>
             <View style={{flex:2, justifyContent:'center', alignItems: 'center'}}>
-              <BigCricle/>
+              <BigCricle {...this.props}/>
             </View>
             <KeyboardAvoidingView
                 style={{flex:1,alignItems:'center'}}

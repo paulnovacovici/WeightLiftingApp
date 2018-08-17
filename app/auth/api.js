@@ -10,3 +10,33 @@ export function addData(data) {
 
   return workoutRef.child(date).set(weight);
 }
+
+export function fetchMax(data) {
+  const { body, workout, reps } = data;
+}
+
+export function fetchWorkouts(body) {
+  const workoutRef = database.ref().child(body).child("workouts");
+  var workouts = []
+
+  return workoutRef.once("value", function(snapshot) {
+    snapshot.forEach(function(child) {
+      workouts.push(child.val())
+    });
+  })
+  .then(() => workouts)
+  .catch((err) => err);
+}
+
+export function fetchReps(body) {
+  const repsRef = database.ref().child(body).child("reps");
+  var reps = []
+
+  return repsRef.once("value", function(snapshot) {
+    snapshot.forEach(function(child) {
+      reps.push(child.val())
+    });
+  })
+  .then(() => reps)
+  .catch((err) => err);
+}
