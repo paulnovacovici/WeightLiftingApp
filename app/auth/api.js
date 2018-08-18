@@ -11,8 +11,29 @@ export function addData(data) {
   return workoutRef.child(date).set(weight);
 }
 
+export function addMax(data) {
+  const { body, workout, reps, max} = data;
+  const maxRef = database.ref().child(body).child(workout).child(reps).child("max")
+
+  return maxRef.set(max);
+}
+
 export function fetchMax(data) {
   const { body, workout, reps } = data;
+  const maxRef = database.ref().child(body).child(workout).child(reps).child("max")
+  var max = 0;
+
+  return maxRef.once('value', function(snapshot) {
+    if (snapshot.exists()) {
+      max = snapshot.val();
+    }
+    else {
+      database.ref().child(body).child(workout).child(reps).child("max").set(0)
+      max = 0
+    }
+  })
+  .then(() => {return max})
+  .catch((err) => 0)
 }
 
 export function fetchWorkouts(body) {

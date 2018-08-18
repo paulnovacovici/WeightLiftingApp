@@ -4,7 +4,7 @@ import DropdownMenu from 'react-native-dropdown-menu';
 import StatusBar from './StatusBar'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { Provider, connect } from 'react-redux'
-import { fetchDataFromAPI, addDataToAPI } from './actions'
+import {  addDataToAPI, changeWorkout, changeReps, changeMax } from './actions'
 
 BigCricle = (props) => {
   return(
@@ -39,7 +39,7 @@ class WeightInput extends Component {
           <TouchableHighlight style={{marginLeft:10, height:40,width:50, borderRadius:10, justifyContent:'center', alignItems: 'center', backgroundColor:'#F7B733', marginTop: 20}}
             onPress= { () => {
               // Adds text input to database
-              this.props.addData({body:"chest", workout:"Flat Barbell", weight:parseInt(this.state.inputText,10), reps:"10x10"})
+              this.props.addData({body:"chest", workout:this.props.data.curWorkout, weight:parseInt(this.state.inputText,10), reps:this.props.data.curReps})
               this.setState({inputText:''})
             } }
             underlayColor='green'>
@@ -75,6 +75,16 @@ class Chest extends Component {
               bgColor={'white'}
               tintColor={'#666666'}
               activityTintColor={'green'}
+              handler={(selection, row) => {
+                if (selection == 0) {
+                  this.props.changeWorkout(data[selection][row]);
+                  this.props.changeMax({workout:data[0][row], reps:this.props.data.curReps, body: this.props.data.body})
+                }
+                else {
+                  this.props.changeReps(data[selection][row]);
+                  this.props.changeMax({workout:this.props.data.curWorkout, reps:data[1][row], body: this.props.data.body})
+                }
+              }}
               data={data}>
             <View style={{flex:2, justifyContent:'center', alignItems: 'center'}}>
               <BigCricle {...this.props}/>
@@ -142,8 +152,10 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getData: () => dispatch(fetchDataFromAPI()),
-    addData: (weight) => dispatch(addDataToAPI(weight))
+    addData: (data) => dispatch(addDataToAPI(data)),
+    changeWorkout: (workout) => dispatch(changeWorkout(workout)),
+    changeReps: (reps) => dispatch(changeReps(reps)),
+    changeMax: (max) => dispatch(changeMax(max))
   }
 }
 

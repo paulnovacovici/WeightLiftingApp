@@ -1,4 +1,5 @@
-import { REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA_FAILURE, ADDING_DATA_SUCCESS, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from '../constants'
+import { MAX_SUCCESS, REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA_FAILURE, ADDING_DATA_SUCCESS, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from '../constants'
+import * as api from '../app/auth/api';
 
 initialState = {
   max: 0,
@@ -12,6 +13,11 @@ initialState = {
 
 export default function dataReducer(state = initialState, action) {
   switch(action.type) {
+    case MAX_SUCCESS:
+      return {
+        ...state,
+        max: action.max
+      }
     case CHANGED_BODY:
       return {
         ...state,
@@ -39,6 +45,7 @@ export default function dataReducer(state = initialState, action) {
       }
     case ADDING_DATA_SUCCESS:
       if (action.weight > state.max){
+        api.addMax({body:state.body, workout:state.curWorkout, reps: state.curReps, max:action.weight})
         return {
           ...state,
           max: action.weight

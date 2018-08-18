@@ -1,14 +1,5 @@
-import { REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA, ADDING_DATA_SUCCESS, ADDING_DATA_FAILURE, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from './constants'
+import { MAX_SUCCESS, MAX_FAILURE, REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA, ADDING_DATA_SUCCESS, ADDING_DATA_FAILURE, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from './constants'
 import * as api from './app/auth/api';
-
-export function fetchDataFromAPI() {
-  return (dispatch) => {
-    dispatch(getData())
-    api.getData(data)
-      .then(json => dispatch(getDataSuccess(json.results)))
-      .catch(err => dispatch(getDataFailure(err)))
-  }
-}
 
 export function addDataToAPI(data) {
   return (dispatch) => {
@@ -19,15 +10,51 @@ export function addDataToAPI(data) {
   }
 }
 
+export function changeMax(data) {
+  const {workout, reps, body} = data;
+  return (dispatch) => {
+    api.fetchMax({workout, reps, body})
+      .then((max) => dispatch(fetchMaxSuccess(max)))
+      .catch((err) => dispatch(fetchMaxFailure()))
+  }
+}
+
 export function changeBody(body){
   return (dispatch) => {
     api.fetchWorkouts(body)
-      .then((workouts) => dispatch(bodyWorkoutsSuccess(workouts)))
-      .catch((err) => dispatch(bodyWorkoutsFailure(err)))
-    api.fetchReps(body)
-      .then((reps) => dispatch(bodyRepsSuccess(reps)))
-      .catch((err) => dispatch(bodyRepsFailure(err)))
+      .then((workouts) => {
+        dispatch(bodyWorkoutsSuccess(workouts));
+        dispatch(_changeWorkout(workouts[0]));
+        return workouts[0]
+      })
+    .then((defaultWorkout) => {
+       return api.fetchReps(body)
+        .then((reps) => {
+          dispatch(bodyRepsSuccess(reps));
+          dispatch(_changeReps(reps[0])); // Could fail if reps is empty
+          return {defaultReps:reps[0],defaultWorkout}
+        })
+        .catch((err) => dispatch(bodyRepsFailure(err)))
+      })
+    .then((data) => {
+      api.fetchMax({workout:data.defaultWorkout, reps:data.defaultReps, body})
+        .then((max) => {dispatch(fetchMaxSuccess(max))})
+        .catch((err) => {dispatch(fetchMaxFailure())})
+      })
     dispatch(_changebody(body))
+  }
+}
+
+export function fetchMaxSuccess(max) {
+  return {
+    type: MAX_SUCCESS,
+    max
+  }
+}
+
+export function fetchMaxFailure() {
+  return {
+    type: MAX_FAILURE,
   }
 }
 
@@ -84,6 +111,7 @@ export function _changeWorkout(workout){
     workout
   }
 }
+
 export function _changeReps(reps){
   return {
     type: CHANGED_REPS,
