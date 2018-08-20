@@ -1,8 +1,10 @@
 import { combineReducers } from 'redux'
 import data from './data'
+import history from './history'
 
 const rootReducer = combineReducers({
-  data
+  data,
+  history
 })
 
 

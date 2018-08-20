@@ -53,9 +53,12 @@ class WeightInput extends Component {
   }
 }
 
-HistoryButton = () => {
+HistoryButton = (props) => {
   return (
-    <TouchableHighlight style={{height:75, backgroundColor:'#F7B733'}}>
+    <TouchableHighlight
+      style={{height:75, backgroundColor:'#F7B733'}}
+      onPress={() => props.navigation.navigate('History')}
+      underlayColor='green'>
       <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
         <Text style={styles.historyText}> History </Text>
       </View>
@@ -94,7 +97,7 @@ class Chest extends Component {
                 behavior="padding">
                 <WeightInput {...this.props}/>
             </KeyboardAvoidingView>
-            <HistoryButton/>
+            <HistoryButton {...this.props}/>
         </DropdownMenu>
         </View>
       </View>
@@ -146,7 +149,8 @@ const styles = StyleSheet.create({
 
 function mapStateToProps(state) {
   return {
-    data: state.data
+    data: state.data,
+    history: state.history
   }
 }
 

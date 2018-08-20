@@ -1,5 +1,13 @@
-import { MAX_SUCCESS, MAX_FAILURE, REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA, ADDING_DATA_SUCCESS, ADDING_DATA_FAILURE, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from './constants'
+import { HISTORY_FAILURE, HISTORY_SUCCESS, MAX_SUCCESS, MAX_FAILURE, REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA, ADDING_DATA_SUCCESS, ADDING_DATA_FAILURE, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from './constants'
 import * as api from './app/auth/api';
+
+export function fetchHistoryFromAPI (data) {
+  return (dispatch) => {
+    api.fetchHistory(data)
+      .then((history) => dispatch(historySuccess(history)))
+      .catch(err => dispatch(historyFailure(err)))
+  }
+}
 
 export function addDataToAPI(data) {
   return (dispatch) => {
@@ -45,6 +53,19 @@ export function changeBody(body){
   }
 }
 
+export function historySuccess(history) {
+  return {
+    type: HISTORY_SUCCESS,
+    history
+  }
+}
+
+export function historyFailure(err) {
+  return {
+    type: HISTORY_FAILURE,
+    err
+  }
+}
 export function fetchMaxSuccess(max) {
   return {
     type: MAX_SUCCESS,

@@ -1,7 +1,23 @@
 import { auth, database, provider } from "../config/firebase";
 
+export function fetchHistory(data) {
+  const {body, workout, reps } = data;
+
+  repsRef = database.ref().child(body).child(workout).child(reps)
+  history = []
+
+  return repsRef.once('value', function(snapshot) {
+    snapshot.forEach(function(child) {
+      if (child.key != 'max')
+        history.push({date:child.key,weight:child.val()});
+    });
+  })
+  .then(() => history)
+  .catch((err) => {console.log("ERROR reading history"); return err})
+}
+
 export function addData(data) {
-  // Should do checks on data before adding it (make sure it's number)
+  // @TODO: Should do checks on data before adding it (make sure it's number)
   const { body, workout, weight, reps } = data;
   var d = new Date();
   const date = (d.getMonth()+1).toString() + "-" + d.getDate().toString() + "-" + d.getFullYear().toString();

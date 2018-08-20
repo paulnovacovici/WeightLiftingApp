@@ -7,6 +7,7 @@ import { Provider } from 'react-redux'
 import configureStore from './configureStore'
 import HomeScreen from './homeScreen'
 import ChestScreen from './chest'
+import HistoryScreen from './history'
 import { createStackNavigator } from 'react-navigation';
 
 
@@ -28,7 +29,15 @@ const RootStack = createStackNavigator({
       title: 'Home',
       header: null
     },
-  }
+  },
+  History : {
+    screen: HistoryScreen,
+    header: {visible: false},
+    navigationOptions: {
+      title: 'History',
+      header: null
+    },
+  },
 });
 
 export default class ReduxTesting extends Component {
