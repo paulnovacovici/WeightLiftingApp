@@ -16,6 +16,17 @@ export function fetchHistory(data) {
   .catch((err) => {console.log("ERROR reading history"); return err})
 }
 
+export function addWorkout(data) {
+  const {body, workout} = data;
+
+  const workoutRef = database.ref().child(body).child("workouts");
+
+  return workoutRef.push(workout)
+    .then(() => workout)
+    .catch((err) => err)
+
+}
+
 export function addData(data) {
   // @TODO: Should do checks on data before adding it (make sure it's number)
   const { body, workout, weight, reps } = data;

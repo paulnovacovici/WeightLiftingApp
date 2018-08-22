@@ -28,7 +28,7 @@ class History extends Component {
   render() {
   return (
     <View style={{flex:1}}>
-      <StatusBar/>
+      {/*<StatusBar/>*/}
       {/*HEADER*/}
       <View style={{backgroundColor:'black', height:60, justifyContent: 'center', alignItems: 'center'}} >
         <Text style={{color:'white'}}> {this.props.data.curWorkout} </Text>

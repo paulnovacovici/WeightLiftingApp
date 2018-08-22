@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
-  AppRegistry
+  AppRegistry,
+  Button
 } from 'react-native'
 
 import { Provider } from 'react-redux'
@@ -24,19 +25,13 @@ const RootStack = createStackNavigator({
   },
   Chest: {
     screen: ChestScreen,
-    header: {visible: false},
     navigationOptions: {
-      title: 'Home',
-      header: null
+      title: 'Chest',
     },
   },
   History : {
     screen: HistoryScreen,
     header: {visible: false},
-    navigationOptions: {
-      title: 'History',
-      header: null
-    },
   },
 });
 
