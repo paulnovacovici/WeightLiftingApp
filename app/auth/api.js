@@ -16,6 +16,34 @@ export function fetchHistory(data) {
   .catch((err) => {console.log("ERROR reading history"); return err})
 }
 
+function findNewMax(data) {
+  const {body,workout,reps} = data;
+
+  const repsRef = database.ref().child(body).child(workout).child(reps)
+  var max = 0
+
+  return repsRef.once('value',function(snapshot) {
+    snapshot.forEach(function(child) {
+      if (child.key != 'max' && child.val() > max) {
+        max = child.val()
+      }
+    });
+  })
+  .then(() => max)
+  .catch((err) => err)
+}
+
+export function removeData(data) {
+  const {body,workout,reps,date} = data;
+
+  const dateRef = database.ref().child(body).child(workout).child(reps).child(date)
+
+  return dateRef.remove()
+    .then(() => findNewMax(data))
+    .then((max) => {addMax({...data,max}); return max})
+    .catch((err) => err)
+}
+
 export function addWorkout(data) {
   const {body, workout} = data;
 
@@ -40,6 +68,7 @@ export function addData(data) {
 
 export function addMax(data) {
   const { body, workout, reps, max} = data;
+  console.log(max);
   const maxRef = database.ref().child(body).child(workout).child(reps).child("max")
 
   return maxRef.set(max);

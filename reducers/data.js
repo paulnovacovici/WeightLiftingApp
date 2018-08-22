@@ -1,4 +1,4 @@
-import { ADD_WORKOUT_FAILURE, ADD_WORKOUT_SUCCESS, MAX_SUCCESS, REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA_FAILURE, ADDING_DATA_SUCCESS, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from '../constants'
+import { REMOVE_DATA_SUCCESS, ADD_WORKOUT_FAILURE, ADD_WORKOUT_SUCCESS, MAX_SUCCESS, REPS_SUCCESS, REPS_FAILURE, WORKOUTS_SUCCESS, WORKOUTS_FAILURE, CHANGED_BODY, CHANGED_WORKOUT, CHANGED_REPS, ADDING_DATA_FAILURE, ADDING_DATA_SUCCESS, FETCHING_DATA, FETCHING_DATA_SUCCESS, FETCHING_DATA_FAILURE } from '../constants'
 import * as api from '../app/auth/api';
 
 initialState = {
@@ -13,8 +13,12 @@ initialState = {
 
 export default function dataReducer(state = initialState, action) {
   switch(action.type) {
+    case REMOVE_DATA_SUCCESS:
+      return {
+        ...state,
+        max: action.max
+      }
     case ADD_WORKOUT_SUCCESS:
-      console.log(action.workout)
       return {
         ...state,
         workouts: state.workouts.concat([action.workout])

@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableHighlight, Dimensions, FlatList } from
 import { List, ListItem} from 'react-native-elements';
 import StatusBar from './StatusBar'
 import { connect } from 'react-redux'
-import { fetchHistoryFromAPI } from './actions'
+import { fetchHistoryFromAPI, removeDataFromAPI } from './actions'
 import Swipeout from 'react-native-swipeout';
 
 
@@ -46,8 +46,7 @@ class History extends Component {
                 backgroundColor: 'red',
                 onPress: () => {
                   /*Delete row index in redux*/
-                  //this.state.data.splice(rowData.index,1)
-                  //this.setState({data:this.state.data})
+                  this.props.removeData({body:this.props.data.body, workout: this.props.data.curWorkout, reps: this.props.data.curReps, date: rowData.item.date, index: rowData.index})
                 }
               }];
 
@@ -92,6 +91,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     fetchHistory: (data) => dispatch(fetchHistoryFromAPI(data)),
+    removeData: (data) => dispatch(removeDataFromAPI(data))
   }
 }
 
