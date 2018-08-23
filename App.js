@@ -7,7 +7,7 @@ import {
 import { Provider } from 'react-redux'
 import configureStore from './configureStore'
 import HomeScreen from './homeScreen'
-import ChestScreen from './chest'
+import BodyScreen from './body'
 import HistoryScreen from './history'
 import { createStackNavigator } from 'react-navigation';
 
@@ -23,11 +23,8 @@ const RootStack = createStackNavigator({
       header: null
     },
   },
-  Chest: {
-    screen: ChestScreen,
-    navigationOptions: {
-      title: 'Chest',
-    },
+  Body: {
+    screen: BodyScreen,
   },
   History : {
     screen: HistoryScreen,

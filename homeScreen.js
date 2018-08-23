@@ -35,24 +35,25 @@ const App = (props) => {
   onPressEvent = (index) => {
     switch (index) {
       case 0:
-          props.changeBody('chest')
-          props.navigation.navigate('Chest');
+        props.changeBody('chest')
+        props.navigation.navigate('Body');
+        break;
       case 1:
-        return {
-          backgroundColor: '#F89406'
-        }
+        props.changeBody('arms')
+        props.navigation.navigate('Body');
+        break;
       case 2:
-        return {
-          backgroundColor: '#CF000F'
-        }
+        props.changeBody('back')
+        props.navigation.navigate('Body');
+        break;
       case 3:
-        return {
-          backgroundColor: '#4183D7'
-        }
+        props.changeBody('shoulders')
+        props.navigation.navigate('Body');
+        break;
       case 4:
-        return {
-          backgroundColor: '#F89406'
-        }
+        props.changeBody('legs')
+        props.navigation.navigate('Body');
+        break;
     }
   }
   renderItem = ({item, index, separators}) => {

@@ -119,7 +119,11 @@ class Prompt extends Component {
   }
 }
 
-class Chest extends Component {
+function upperCase(word) {
+  return word.charAt(0).toUpperCase() + word.substr(1);
+}
+
+class Body extends Component {
   constructor(props) {
     super(props)
 
@@ -132,8 +136,8 @@ class Chest extends Component {
     this.setState({ isDialogVisible: !this.state.isDialogVisible });
   };
 
-  componentDidMount() {
-    this.props.navigation.setParams({ toggleVisibility: this._toggleVisibility });
+  componentDidMount() { 
+    this.props.navigation.setParams({ toggleVisibility: this._toggleVisibility, body: upperCase(this.props.data.body)});
   }
 
   static navigationOptions = ({ navigation }) => {
@@ -150,6 +154,7 @@ class Chest extends Component {
               color='black'/>
         </TouchableHighlight>
       ),
+      title: navigation.getParam('body')
     };
   }
 
@@ -262,4 +267,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Chest)
+export default connect(mapStateToProps, mapDispatchToProps)(Body)
